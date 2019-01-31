@@ -23,6 +23,10 @@ class Channels::Client
     end
   end
 
+  def toggle_pause
+    command('toggle_pause')
+  end
+
   def pause
     command('pause')
   end
@@ -53,6 +57,10 @@ class Channels::Client
 
   def skip_backward
     command('skip_backward')
+  end
+
+  def previous_channel
+    command('previous_channel')
   end
 
   def toggle_mute
