@@ -17,11 +17,8 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'httparty', '~> 0.16.0'
 
-  all_files = `git ls-files`.split("\n")
-  test_files = `git ls-files -- {test,spec,features}/*`.split("\n")
-
-  s.files         = all_files - test_files
-  s.test_files    = test_files
+  s.files         = ["lib/rbchannels.rb", "lib/rbchannels/version.rb"]
+  s.test_files    = ["test/test_channels.rb"]
   s.require_paths = ["lib"]
 
 end
