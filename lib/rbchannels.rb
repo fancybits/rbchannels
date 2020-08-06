@@ -78,17 +78,18 @@ class Channels::Client
 
   private
 
-  def request(method, path)
+  def request(method, path, data=nil)
+    headers = {"Content-Type": "application/json", "Accept": "application/json"}
     begin
       case method
       when "GET"
-        response = self.class.get(path)
+        response = self.class.get(path, headers: headers)
       when "POST"
-        response = self.class.post(path)
+        response = self.class.post(path, {body: data.to_json, headers: headers})
       when "PUT"
-        response = self.class.put(path)
+        response = self.class.put(path, body: data.to_json, headers: headers)
       when "DELETE"
-        response = self.class.delete(path)
+        response = self.class.delete(path, headers: headers)
       end
 
       if response
@@ -101,8 +102,8 @@ class Channels::Client
     end
   end
 
-  def command(named_command)
-    return request('POST', '/' + named_command)
+  def command(named_command, data=nil)
+    return request('POST', '/' + named_command, data)
   end
 
 end
