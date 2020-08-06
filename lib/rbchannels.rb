@@ -23,12 +23,32 @@ class Channels::Client
     end
   end
 
+  def toggle_mute
+    command('toggle_mute')
+  end
+
+  def toggle_cc
+    command('toggle_cc')
+  end
+
+  def channel_up
+    command('channel_up')
+  end
+
+  def channel_down
+    command('channel_down')
+  end
+
   def previous_channel
     command('previous_channel')
   end
 
   def toggle_pause
     command('toggle_pause')
+  end
+
+  def toggle_record
+    command('toggle_record')
   end
 
   def pause
@@ -75,6 +95,14 @@ class Channels::Client
     command("play/recording/#{recording_id}")
   end
 
+  def navigate(section)
+    command("navigate/#{URI::encode(section)}")
+  end
+
+  def notify(title, message)
+    data = {title: title, message: message}
+    command("notify", data)
+  end
 
   private
 
