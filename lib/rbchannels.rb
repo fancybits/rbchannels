@@ -23,8 +23,32 @@ class Channels::Client
     end
   end
 
+  def toggle_mute
+    command('toggle_mute')
+  end
+
+  def toggle_cc
+    command('toggle_cc')
+  end
+
+  def channel_up
+    command('channel_up')
+  end
+
+  def channel_down
+    command('channel_down')
+  end
+
+  def previous_channel
+    command('previous_channel')
+  end
+
   def toggle_pause
     command('toggle_pause')
+  end
+
+  def toggle_record
+    command('toggle_record')
   end
 
   def pause
@@ -59,10 +83,6 @@ class Channels::Client
     command('skip_backward')
   end
 
-  def previous_channel
-    command('previous_channel')
-  end
-
   def toggle_mute
     command('toggle_mute')
   end
@@ -75,20 +95,29 @@ class Channels::Client
     command("play/recording/#{recording_id}")
   end
 
+  def navigate(section)
+    command("navigate/#{URI::encode(section)}")
+  end
+
+  def notify(title, message)
+    data = {title: title, message: message}
+    command("notify", data)
+  end
 
   private
 
-  def request(method, path)
+  def request(method, path, data=nil)
+    headers = {"Content-Type": "application/json", "Accept": "application/json"}
     begin
       case method
       when "GET"
-        response = self.class.get(path)
+        response = self.class.get(path, headers: headers)
       when "POST"
-        response = self.class.post(path)
+        response = self.class.post(path, {body: data.to_json, headers: headers})
       when "PUT"
-        response = self.class.put(path)
+        response = self.class.put(path, body: data.to_json, headers: headers)
       when "DELETE"
-        response = self.class.delete(path)
+        response = self.class.delete(path, headers: headers)
       end
 
       if response
@@ -101,8 +130,8 @@ class Channels::Client
     end
   end
 
-  def command(named_command)
-    return request('POST', '/' + named_command)
+  def command(named_command, data=nil)
+    return request('POST', '/' + named_command, data)
   end
 
 end
